@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANIMALES</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1">Anterior</button>
+      <span>Página {{ currentPage }} de {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+  <script>
+        const { createApp } = Vue;
+
+        createApp({
+        template: `
+
+        <h1>Lista de Animales</h1>
+
+        <p v-for="animal in paginatedAnimales" :key="animal.id">
+            <div class="row row-cols-0 row-cols-md-2 g-4">
+                <div class="col">
+                    <div class="card h-100">  
+                        <h4 class="card-title"> {{ animal.nombre.toUpperCase() }}  </h4>
+                        <img :src="animal.imagen" :alt="animal.nombre" width="100" height="100" />
+                        
+                            
+                        <div class="card-body">
+                        <p class="card-text">{{animal.descripcion}}</p>   
+                    
+                
+                    </div>
+                                  
+            </div>
+        </p>
+
+            <div class="pagination">
+                <button @click="prevPage" :disabled="currentPage === 1">Anterior</button>
+                &nbsp&nbsp&nbsp<span>Página {{ currentPage }} de {{ totalPages }}</span>&nbsp&nbsp&nbsp
+                <button @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
+            </div>
+            </div>
+        `,
+        data() {
+            return {
+                animales: [
+                { id: 1, nombre: "Gato", descripcion: "Aquí podemos comprobar un felino docil sentado.", imagen: "img/gato.webp" },
+                { id: 2, nombre: "Hipopotamo", descripcion: " Podemos ver una hipopotama con su hija.", imagen: "img/hipo.webp" },
+                { id: 3, nombre: "Loro Naranja", descripcion: "Dos leales lorito estan en duo.", imagen: "img/loro_naranja.webp" },
+                { id: 4, nombre: "Loro de colores", descripcion: "Dos guacamayo, uno dandole un pico a otro.", imagen: "img/loro_normal.webp" },
+                { id: 5, nombre: "Loro verde", descripcion: "Un pajarito verde posando para la foto", imagen: "img/loro_verde.webp" },
+                { id: 6, nombre: "Zorra", descripcion: "Una zorrita en la nieve.", imagen: "img/zorra.webp" }
+                
+            ],
+            currentPage: 1,
+            itemsPerPage: 2,
+            };
+        },
+        computed: {
+            totalPages() {
+            return Math.ceil(this.animales.length / this.itemsPerPage);
+            },
+            paginatedAnimales() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.animales.slice(start, end);
+            },
+        },
+        methods: {
+            nextPage() {
+            if (this.currentPage < this.totalPages) this.currentPage++;
+            },
+            prevPage() {
+            if (this.currentPage > 1) this.currentPage--;
+            },
+        },
+        }).mount('#app');
+
+  </script>
+</body>
+</html>
